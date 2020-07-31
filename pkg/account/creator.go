@@ -7,6 +7,7 @@ import (
 
 	"gitlab.com/dracarys-botter/osrs-account-creator/pkg"
 	req "gitlab.com/dracarys-botter/osrs-account-creator/pkg/requests_helper"
+	sel "gitlab.com/dracarys-botter/osrs-account-creator/pkg/selenium_helper"
 )
 
 
@@ -57,6 +58,12 @@ func RegisterAccount(account pkg.AccountConfig, mode pkg.ClientDriverMode, twoCa
 	switch mode {
 	case pkg.RequestMode:
 		if output, err := req.CreateAccount(account, twoCaptchaAPIKey); err != nil {
+			return nil, fmt.Errorf("err: %v", err)
+		} else {
+			fmt.Printf("output: %v", output)
+		}
+	case pkg.SeleniumMode:
+		if output, err := sel.CreateAccount(account, twoCaptchaAPIKey); err != nil {
 			return nil, fmt.Errorf("err: %v", err)
 		} else {
 			fmt.Printf("output: %v", output)

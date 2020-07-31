@@ -20,7 +20,7 @@ const (
 	// RequestMode TODO
 	RequestMode ClientDriverMode = "requests"
 	// SeleniumMode TODO
-	// SeleniumMode ClientDriverMode = "selenium"
+	SeleniumMode ClientDriverMode = "selenium"
 )
 
 // ProxyConfig TODO
