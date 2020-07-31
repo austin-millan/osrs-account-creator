@@ -21,6 +21,19 @@ import (
 	req "gitlab.com/dracarys-botter/osrs-account-creator/pkg/requests_helper"
 )
 
+// DoAccountVerificationGmail is a wrapper for verifying OSRS emails
+func DoAccountVerificationGmail(credentialsPath string, config pkg.AccountConfig) (err error) {
+	srv, err := loginGmail(credentialsPath)
+	if err != nil {
+		return err
+	}
+	err = verifyOSRSEmailGmail(srv, config)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // Retrieve a token, saves the token, then returns the generated client.
 func getClient(config *oauth2.Config) *http.Client {
 	// The file token.json stores the user's access and refresh tokens, and is
@@ -102,8 +115,8 @@ func getVerificationLink(input string) (output string) {
 	return ""
 }
 
-// GetAllEmailsGmail to retrieve all Gmail emails
-func GetAllEmailsGmail(srv *gmail.Service, accountConfig pkg.AccountConfig) (allMessages []*gmail.Message, err error) {
+// getAllEmailsGmail to retrieve all Gmail emails
+func getAllEmailsGmail(srv *gmail.Service, accountConfig pkg.AccountConfig) (allMessages []*gmail.Message, err error) {
 	allMessages = make([]*gmail.Message, 0)
 	messages, err := srv.Users.Messages.List("me").Do()
 	if err != nil {
@@ -126,8 +139,7 @@ func GetAllEmailsGmail(srv *gmail.Service, accountConfig pkg.AccountConfig) (all
 	return allMessages, nil
 }
 
-// FilterOSRSEmailsGmail filters emails from a list of gmail messages
-func FilterOSRSEmailsGmail(srv *gmail.Service, messages []*gmail.Message) (osrsEmails []*gmail.Message, err error) {
+func filterOSRSEmailsGmail(srv *gmail.Service, messages []*gmail.Message) (osrsEmails []*gmail.Message, err error) {
 	osrsEmails = make([]*gmail.Message, 0)
 	for _, message := range messages {
 		fullMsg, err := srv.Users.Messages.Get("me", message.Id).Format("full").Do()
@@ -141,13 +153,12 @@ func FilterOSRSEmailsGmail(srv *gmail.Service, messages []*gmail.Message) (osrsE
 	return osrsEmails, nil
 }
 
-// VerifyOSRSEmailGmail to verify all OSRS emails
-func VerifyOSRSEmailGmail(srv *gmail.Service, config pkg.AccountConfig) (err error) {
-	emails, err := GetAllEmailsGmail(srv, config)
+func verifyOSRSEmailGmail(srv *gmail.Service, config pkg.AccountConfig) (err error) {
+	emails, err := getAllEmailsGmail(srv, config)
 	if err != nil {
 		return fmt.Errorf("Unable to get all emails: %s", err)
 	}
-	filteredEmails, err := FilterOSRSEmailsGmail(srv, emails)
+	filteredEmails, err := filterOSRSEmailsGmail(srv, emails)
 	for _, message := range filteredEmails {
 		fullMsg, err := srv.Users.Messages.Get("me", message.Id).Format("full").Do()
 		if err != nil {
@@ -170,21 +181,8 @@ func VerifyOSRSEmailGmail(srv *gmail.Service, config pkg.AccountConfig) (err err
 	return nil
 }
 
-// DoAccountVerificationGmail TODO
-func DoAccountVerificationGmail(credentialsPath string, config pkg.AccountConfig) (err error) {
-	srv, err := LoginGmail(credentialsPath)
-	if err != nil {
-		return err
-	}
-	err = VerifyOSRSEmailGmail(srv, config)
-	if err != nil {
-		return err
-	}
-	return nil
-}
 
-// LoginGmail TODO
-func LoginGmail(credentialsPath string) (srv *gmail.Service, err error) {
+func loginGmail(credentialsPath string) (srv *gmail.Service, err error) {
 	b, err := ioutil.ReadFile(credentialsPath)
 	if err != nil {
 		log.Fatalf("Unable to read client secret file: %v", err)

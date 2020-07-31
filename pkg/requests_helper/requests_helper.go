@@ -60,42 +60,8 @@ func NewProxiedHTTPClient(config *pkg.ProxyConfig) (c *http.Client, err error) {
 	return
 }
 
-func setRunescapeCommonHeaders(req *http.Request) {
-	if req == nil {
-		return
-	}
-	req.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36")
-	req.Header.Add("Origin", "https://secure.runescape.com/")
-	req.Header.Add("Referer", "https://secure.runescape.com/m=account-creation/create_account?theme=oldschool")
-	req.Header.Add("DNT", "1")
-	req.Header.Add("TE", "Trailers")
-	req.Header.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
-	// req.Header.Add("Accept-Encoding", "gzip, deflate, br")
-	req.Header.Add("Accept-Language", "en-GB,en-US;q=0.8,en;q=0.6")
-	req.Header.Add("Cache-Control", "max-age=0")
-	req.Header.Add("Connection", "keep-alive")
-	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
-	req.Header.Add("Host", "secure.runescape.com")
-	req.Header.Add("Upgrade-Insecure-Requests", "1")
-}
 
-func setProtonmailCommonHeaders(req *http.Request) {
-	if req == nil {
-		return
-	}
-	req.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36")
-	req.Header.Add("DNT", "1")
-	req.Header.Add("TE", "Trailers")
-	req.Header.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
-	req.Header.Add("Accept-Language", "en-GB,en-US;q=0.8,en;q=0.6")
-	req.Header.Add("Cache-Control", "max-age=0")
-	req.Header.Add("Connection", "keep-alive")
-	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
-	req.Header.Add("Host", "secure.runescape.com")
-	req.Header.Add("Upgrade-Insecure-Requests", "1")
-}
-
-// VerifyAccount TODO
+// VerifyAccount verifies an account behind a proxy
 func VerifyAccount(verifyAccountURL string, config pkg.ProxyConfig) (err error) {
 	c, err := NewProxiedHTTPClient(&config)
 	if err != nil {
@@ -123,7 +89,7 @@ func VerifyAccount(verifyAccountURL string, config pkg.ProxyConfig) (err error) 
 	return nil
 }
 
-// CreateAccount TODO
+// CreateAccount creates an account and solves captcha AOT
 func CreateAccount(account pkg.AccountConfig, twoCaptchaAPIKey string) (output *pkg.NewAccountOutput, err error) {
 	var solution string
 	cli, err := NewProxiedHTTPClient(&pkg.ProxyConfig{
@@ -190,7 +156,7 @@ func CreateAccount(account pkg.AccountConfig, twoCaptchaAPIKey string) (output *
 	if strings.Contains(stringified, "Account Created - RuneScape") {
 		fmt.Printf("Account created")
 	} else {
-		fmt.Printf("Account NOT created")
+		return nil, fmt.Errorf("Account not created")
 	}
 	output = &pkg.NewAccountOutput{
 		Email:         account.Email,
@@ -241,3 +207,39 @@ func CreateAccount(account pkg.AccountConfig, twoCaptchaAPIKey string) (output *
 
 // 	return output, nil
 // }
+
+
+func setRunescapeCommonHeaders(req *http.Request) {
+	if req == nil {
+		return
+	}
+	req.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36")
+	req.Header.Add("Origin", "https://secure.runescape.com/")
+	req.Header.Add("Referer", "https://secure.runescape.com/m=account-creation/create_account?theme=oldschool")
+	req.Header.Add("DNT", "1")
+	req.Header.Add("TE", "Trailers")
+	req.Header.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
+	// req.Header.Add("Accept-Encoding", "gzip, deflate, br")
+	req.Header.Add("Accept-Language", "en-GB,en-US;q=0.8,en;q=0.6")
+	req.Header.Add("Cache-Control", "max-age=0")
+	req.Header.Add("Connection", "keep-alive")
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Add("Host", "secure.runescape.com")
+	req.Header.Add("Upgrade-Insecure-Requests", "1")
+}
+
+func setProtonmailCommonHeaders(req *http.Request) {
+	if req == nil {
+		return
+	}
+	req.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36")
+	req.Header.Add("DNT", "1")
+	req.Header.Add("TE", "Trailers")
+	req.Header.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
+	req.Header.Add("Accept-Language", "en-GB,en-US;q=0.8,en;q=0.6")
+	req.Header.Add("Cache-Control", "max-age=0")
+	req.Header.Add("Connection", "keep-alive")
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Add("Host", "secure.runescape.com")
+	req.Header.Add("Upgrade-Insecure-Requests", "1")
+}

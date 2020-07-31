@@ -1,5 +1,19 @@
 # osrs-account-creator
 
+## About
+
+A library for creating OSRS accounts behind a proxy and verifying accounts using GMail API.
+
+## Setup
+
+```bash
+go get -u gitlab.com/dracarys-botter/osrs-account-creator
+```
+
+## Requirements
+
+Only works behind a SOCKS5 proxy. This is intended to avoid tainting your home IP address.
+
 ## Example Usage
 
 ```go
@@ -35,3 +49,7 @@ func main() {
     account.DoAccountVerificationGmail("credentials.json", accConfig)
 }
 ```
+
+## Issues
+
+- Only works behind SOCKS5 proxy, but ideally will allow multiple protocols (HTTP/HTTPS) and the ability to wave the proxy altogether

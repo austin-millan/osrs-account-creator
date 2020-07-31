@@ -10,7 +10,7 @@ import (
 )
 
 
-// RegisterAccounts TODO
+// RegisterAccounts wrapper for registering many accounts
 func RegisterAccounts(accounts []pkg.AccountConfig, mode pkg.ClientDriverMode, twoCaptchaAPIKey string) (output []pkg.NewAccountOutput, err error) {
 	output = make([]pkg.NewAccountOutput, 0)
 	for _, acc := range accounts {
@@ -44,7 +44,7 @@ func newBirthday() (day, month, year string) {
 	return
 }
 
-// RegisterAccount TODO
+// RegisterAccount register an account and solve the captcha problem
 func RegisterAccount(account pkg.AccountConfig, mode pkg.ClientDriverMode, twoCaptchaAPIKey string) (output *pkg.NewAccountOutput, err error) {
 	pass := newPassword(12)
 	day, month, year := newBirthday()

@@ -3,27 +3,27 @@ package pkg
 import "fmt"
 
 const (
-	// RunescapeURL TODO
+	// RunescapeURL is Runescape account creation page
 	RunescapeURL = "https://secure.runescape.com/m=account-creation/create_account"
-	// RunecapeCaptchaSiteKey TODO
+	// RunecapeCaptchaSiteKey is Runescape's captcha key
 	RunecapeCaptchaSiteKey = "6Lcsv3oUAAAAAGFhlKrkRb029OHio098bbeyi_Hv"
-	// CaptchaRetries TODO
+	// CaptchaRetries declares number of attempts to retry solving a captcha
 	CaptchaRetries = 5
-	// ProtonMailLoginURL TODO
+	// ProtonMailLoginURL is ProtonMail account login page
 	ProtonMailLoginURL = "https://mail.protonmail.com/login"
 )
 
-// ClientDriverMode TODO
+// ClientDriverMode enum
 type ClientDriverMode string
 
 const (
-	// RequestMode TODO
+	// RequestMode to do account creation/verification via HTTP requests
 	RequestMode ClientDriverMode = "requests"
-	// SeleniumMode TODO
-	// SeleniumMode ClientDriverMode = "selenium"
+	// SeleniumMode to do account creation/verification via Selenium webdriver
+	SeleniumMode ClientDriverMode = "selenium"
 )
 
-// ProxyConfig TODO
+// ProxyConfig for proxy (used in each `ClientDriverMode`s)
 type ProxyConfig struct {
 	IP   string
 	Port string
@@ -31,7 +31,7 @@ type ProxyConfig struct {
 	Pass string
 }
 
-// AccountData TODO
+// AccountData is used internally for storing form data
 type AccountData struct {
 	Password      string
 	BirthdayDay   string
@@ -39,14 +39,14 @@ type AccountData struct {
 	BirthdayYear  string
 }
 
-// AccountConfig TODO
+// AccountConfig is used as input for registering accounts
 type AccountConfig struct {
 	Email     string
 	ProxyConfig ProxyConfig
 	AccountData AccountData
 }
 
-// NewAccountOutput TODO
+// NewAccountOutput is the output of a Register account operation, user should save this
 type NewAccountOutput struct {
 	Email         string
 	ProxyIP       string
@@ -59,7 +59,7 @@ type NewAccountOutput struct {
 	Recaptcha     string
 }
 
-// ShowAccountOutput TODO
+// ShowAccountOutput is a helper function for displaying NewAccountOutput
 func ShowAccountOutput(input NewAccountOutput) {
 	fmt.Printf("Email: %s", input.Email)
 	fmt.Printf("ProxyIP: %s", input.ProxyIP)
