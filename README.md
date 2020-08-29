@@ -53,3 +53,8 @@ func main() {
 ## Issues
 
 - Only works behind SOCKS5 proxy, but ideally will allow multiple protocols (HTTP/HTTPS) and the ability to wave the proxy altogether
+
+## Repository Views
+
+[![HitCount](http://hits.dwyl.com/austin-millan/robinhood-client.svg)](http://hits.dwyl.com/austin-millan/osrs-account-creator)
+
