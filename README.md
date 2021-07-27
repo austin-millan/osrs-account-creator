@@ -1,4 +1,7 @@
+**[DEPRECATED, UNMAINTAINED] This repository is unmaintained and no longer works due to Jagex integrating Incapsula.**
+
 # osrs-account-creator
+
 
 ## About
 
